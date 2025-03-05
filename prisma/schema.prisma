@@ -1,0 +1,92 @@
+  generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// USERS Table
+model User {
+  user_id        Int     @id @default(autoincrement())
+  is_admin       Boolean @default(false)
+  username       String  @unique
+  thumbnail_file String?
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  chat_logs ChatLog[]
+}
+
+model Session {
+  session_id     Int     @id @default(autoincrement())
+  name           String
+  thumbnail_file String?
+  battle_grid    Json
+  is_live        Boolean @default(false)
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  assets Asset[]
+  chat_logs ChatLog[]
+}
+
+// ASSET CLASSES Table
+model AssetClass {
+  asset_class_id  Int     @id @default(autoincrement())
+  name            String
+  thumbnail_file  String?
+  asset_type      AssetType
+  width           Int
+  height          Int
+  health          Int?
+  movement_speed  Int?
+  event_type      EventType?
+  color           String?
+  max_duration    Int?
+  notes           String
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  assets Asset[]
+}
+
+// ASSETS Table
+model Asset {
+  asset_id         Int      @id @default(autoincrement())
+  session_id       Int
+  asset_class_id   Int
+  current_health   Int?
+  current_movement Int?
+  turns_active     Int?
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  session    Session   @relation(fields: [session_id], references: [session_id], onDelete: Cascade)
+  assetClass AssetClass @relation(fields: [asset_class_id], references: [asset_class_id], onDelete: Cascade)
+}
+
+// CHAT LOGS Table
+model ChatLog {
+  chat_log_id Int      @id @default(autoincrement())
+  session_id  Int
+  user_id     Int
+  timestamp   DateTime
+  rolls       Json
+  message     String
+
+  session Session @relation(fields: [session_id], references: [session_id], onDelete: Cascade)
+  user    User    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+}
+
+// ENUMS
+enum AssetType {
+  ENTITY
+  EVENT
+}
+
+enum EventType {
+  OBSTACLE
+  SPELL
+}
