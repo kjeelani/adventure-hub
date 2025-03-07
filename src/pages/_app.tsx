@@ -10,13 +10,9 @@ import {
 } from '@clerk/nextjs'
 
 export default function App({ Component, pageProps }: AppProps) {
-  <ClerkProvider {...pageProps}>
-      <SignedOut>
-        <SignInButton />
-      </SignedOut>
-      <SignedIn>
-        <UserButton />
-      </SignedIn>
+  return (
+  <ClerkProvider signInUrl="/sign-in" {...pageProps}>
       <Component {...pageProps} />
     </ClerkProvider>
+  );
 }

@@ -9,12 +9,12 @@ datasource db {
 
 // USERS Table
 model User {
-  user_id        Int     @id @default(autoincrement())
+  user_id        String     @id
   is_admin       Boolean @default(false)
   username       String  @unique
   thumbnail_file String?
-  created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
+  created_at     DateTime? @default(now())
+  updated_at     DateTime? @updatedAt
 
   chat_logs ChatLog[]
 }
@@ -25,8 +25,8 @@ model Session {
   thumbnail_file String?
   battle_grid    Json
   is_live        Boolean @default(false)
-  created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
+  created_at     DateTime? @default(now())
+  updated_at     DateTime? @updatedAt
 
   assets Asset[]
   chat_logs ChatLog[]
@@ -46,8 +46,8 @@ model AssetClass {
   color           String?
   max_duration    Int?
   notes           String
-  created_at      DateTime @default(now())
-  updated_at      DateTime @updatedAt
+  created_at      DateTime? @default(now())
+  updated_at      DateTime? @updatedAt
 
   assets Asset[]
 }
@@ -60,8 +60,8 @@ model Asset {
   current_health   Int?
   current_movement Int?
   turns_active     Int?
-  created_at       DateTime @default(now())
-  updated_at       DateTime @updatedAt
+  created_at       DateTime? @default(now())
+  updated_at       DateTime? @updatedAt
 
   session    Session   @relation(fields: [session_id], references: [session_id], onDelete: Cascade)
   assetClass AssetClass @relation(fields: [asset_class_id], references: [asset_class_id], onDelete: Cascade)
@@ -71,7 +71,7 @@ model Asset {
 model ChatLog {
   chat_log_id Int      @id @default(autoincrement())
   session_id  Int
-  user_id     Int
+  user_id     String
   timestamp   DateTime
   rolls       Json
   message     String

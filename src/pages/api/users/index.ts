@@ -4,9 +4,11 @@ import { User } from "../../../types/prisma";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "GET") {
-    if (req.body?.user_id) {
+    const { user_id } = req.query;
+    console.log(user_id)
+    if (user_id) {
       const user: User | null = await prisma.user.findUnique({
-        where: { user_id: req.body.user_id },
+        where: { user_id: user_id as string},
       });
       return res.status(200).json(user);
     }
@@ -18,9 +20,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!req.body || Object.keys(req.body).length === 0) {
       return res.status(400).json({ message: "Invalid Body" });
     }
-    const { user_id, ...userData } = req.body;
     try {
-      const user = await prisma.user.create({ data: userData });
+      const user = await prisma.user.create({ data: req.body });
       return res.status(201).json(user);
     } catch (error) {
       return res.status(500).json({ error: "Failed to create user" });
