@@ -1,11 +1,12 @@
-import AuthWrapper from '@/components/AuthWrapper';
-import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from "next/font/google";
+import { LoaderCircle } from "lucide-react";
 
 export default function Home() {
-  return (
-    <AuthWrapper>
-      <h1>Loading...</h1>
-    </AuthWrapper>
-  );
+    return (
+        // <AuthWrapper>
+        <div className="flex gap-2 items-center justify-center h-screen w-screen">
+            <LoaderCircle className="size-4 animate-spin" />
+            <span>Loading...</span>
+        </div>
+        // </AuthWrapper>
+    );
 }
