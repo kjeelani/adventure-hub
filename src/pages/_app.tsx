@@ -11,8 +11,8 @@ import {
 
 export default function App({ Component, pageProps }: AppProps) {
     return (
-        // <ClerkProvider signInUrl="/sign-in" {...pageProps}>
-        <Component {...pageProps} />
-        // </ClerkProvider>
+        <ClerkProvider signInUrl="/sign-in" {...pageProps}>
+            <Component {...pageProps} />
+        </ClerkProvider>
     );
 }
